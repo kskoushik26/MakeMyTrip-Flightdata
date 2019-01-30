@@ -14,10 +14,10 @@ import com.makemytrip.data.repository.FlightRepository;
 import com.makemytrip.data.supportclass.SequenceGeneratorService;
 
 
-@RestController
+//@RestController
 public class FlightController {
 
-	@Autowired
+	/*@Autowired
 	FlightRepository flightRepository;
 
 	@Autowired
@@ -27,7 +27,7 @@ public class FlightController {
 	@RequestMapping(method = RequestMethod.POST, value = "/flights/create")
 	public String create(@RequestBody FlightDetails flight) {
 		if(flight!=null) {
-			flight.setFlightId((sequenceGenerator.generateSequence(FlightDetails.SEQUENCE_NAME)));
+			//flight.setId((sequenceGenerator.generateSequence(FlightDetails.SEQUENCE_NAME)));
 			flightRepository.save(flight);
 			return "Flight Added Successfully";
 		}
@@ -47,7 +47,7 @@ public class FlightController {
 		List<FlightDetails> flights=flightRepository.findAll();
 		for (FlightDetails list1 : flights) {
 
-			if (list1.getFlightId()==flightId) {
+			if (list1.getId()==flightId) {
 				return list1;
 			}
 		}
@@ -60,8 +60,8 @@ public class FlightController {
 		List<FlightDetails> flights=flightRepository.findAll();
 
 		for (FlightDetails Obj : flights) {
-			if(Obj.getFlightId()==flightId) {
-				flight.setFlightId(flightId);
+			if(Obj.getId()==flightId) {
+				flight.setId(flightId);
 				flightRepository.save(flight);
 
 				return true;
@@ -87,7 +87,7 @@ public class FlightController {
 		for (FlightDetails flight : flights) {
 
 
-			if(flight.getFlightId()==flightId) {
+			if(flight.getId()==flightId) {
 				flightRepository.delete(flightId);
 				return "flight deleted";
 			}
@@ -118,5 +118,5 @@ public class FlightController {
 			}		
 	}
 		return resultedFlights;
-}
+}*/
 }

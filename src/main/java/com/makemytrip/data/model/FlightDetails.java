@@ -3,19 +3,22 @@ package com.makemytrip.data.model;
 
 import java.util.Date;
 
-import org.springframework.data.annotation.Id;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.makemytrip.data.supportclass.DateHandler;
-@Document(collection="FlightsDetails")
+//@Document(collection="FlightDetails")
+@Entity
 public class FlightDetails 
 {
-	@Transient
-    public static final String SEQUENCE_NAME = "users_sequence";
+	/*@Transient
+    public static final String SEQUENCE_NAME = "users_sequence";*/
 	@Id
-	private long flightId;
+	private long id;
 	private String flightName;
 	private String source;
 	private String destination;
@@ -29,10 +32,10 @@ public class FlightDetails
 		super();
 	}
 
-	public FlightDetails(long flightId, String flightName, String source, String destination, Date arrival, Date departure,
+	public FlightDetails(long id, String flightName, String source, String destination, Date arrival, Date departure,
 			double price) {
 		super();
-		this.flightId = flightId;
+		this.id = id;
 		this.flightName = flightName;
 		this.source = source;
 		this.destination = destination;
@@ -41,12 +44,12 @@ public class FlightDetails
 		this.price = price;
 	}
 
-	public long getFlightId() {
-		return flightId;
+	public long getId() {
+		return id;
 	}
 
-	public void setFlightId(long flightId) {
-		this.flightId = flightId;
+	public void setId(long flightId) {
+		this.id = flightId;
 	}
 
 	public String getFlightName() {
@@ -97,12 +100,7 @@ public class FlightDetails
 		this.price = price;
 	}
 
-	@Override
-	public String toString() {
-		return "FlightData [flightId=" + flightId + ", flightName=" + flightName + ", source=" + source
-				+ ", destination=" + destination + ", arrival=" + arrival + ", departure=" + departure + ", price="
-				+ price + "]";
-	}
+	
 	
 	
 	
