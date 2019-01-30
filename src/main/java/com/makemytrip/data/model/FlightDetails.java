@@ -8,6 +8,8 @@ import javax.persistence.Id;
 
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.makemytrip.data.supportclass.DateHandler;
@@ -22,9 +24,11 @@ public class FlightDetails
 	private String flightName;
 	private String source;
 	private String destination;
-	@JsonDeserialize(using =DateHandler.class)
+	//@JsonDeserialize(using =DateHandler.class)
+	@DateTimeFormat(iso = ISO.DATE_TIME)
 	private Date arrival;
-	@JsonDeserialize(using =DateHandler.class)
+	//@JsonDeserialize(using =DateHandler.class)
+	@DateTimeFormat(iso = ISO.DATE_TIME)
 	private Date departure;
 	private double price;
 	
@@ -98,6 +102,12 @@ public class FlightDetails
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	@Override
+	public String toString() {
+		return "FlightDetails [id=" + id + ", flightName=" + flightName + ", source=" + source + ", destination="
+				+ destination + ", arrival=" + arrival + ", departure=" + departure + ", price=" + price + "]";
 	}
 
 	

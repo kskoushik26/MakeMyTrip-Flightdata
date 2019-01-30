@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.makemytrip.data.model.ApiResponse;
 
-//ControllerErrorHandler class handle all the exception for the UserController Rest Service
+//ControllerErrorHandler class handle all the exception for the FlightController Rest Service
 @ControllerAdvice
 public class ControllerErrorHandler {
 

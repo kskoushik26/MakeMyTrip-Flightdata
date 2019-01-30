@@ -29,7 +29,6 @@ import com.makemytrip.data.service.SequenceService;
 
 
 
-
 @RestController
 @CrossOrigin("*")
 public class FlightController1 {
@@ -41,12 +40,12 @@ public class FlightController1 {
 
 	@Inject
 	private MongoTemplate mongoTemplate;
-	
+
 
 	//returns all  flight from flight details collection
 	@GetMapping("/flights")
-	public ApiResponse<List<FlightDetails>> getAllflights(){
-
+	public ApiResponse<List<FlightDetails>> findAll(){
+		
 		List<FlightDetails> flights=mongoTemplate.findAll(FlightDetails.class);
 		if(flights==null) {
 			throw new NoFlightFoundException("No Flight Exist");
@@ -54,9 +53,31 @@ public class FlightController1 {
 		return new ApiResponse<>(HttpStatus.OK.value(),"Flight List",flights);
 	}
 
-	//Remove document that match the provided id from the user collection
+	
+	
+
+	//returns all  flight from flight details collection
+	@PostMapping("/flights/search")
+	public ApiResponse<List<FlightDetails>> findAll(@RequestBody SearchFlights searchFlights){
+
+		Query query =  new Query(Criteria.where("source").is(searchFlights.getSource())
+						.and("destination").is(searchFlights.getDestination())
+						.and("departure").is(searchFlights.getDeparture()));
+
+		List<FlightDetails> flights=mongoTemplate.find(query, FlightDetails.class);
+
+		if(flights==null) {
+			throw new NoFlightFoundException("No Flights are available for this route ");
+		}
+		return new ApiResponse<>(HttpStatus.OK.value(),"Flight List",flights);
+	}
+
+	
+	
+
+	//Remove document that match the provided id from the flight detail collection
 	@DeleteMapping("/flights/{flightId}")
-	public ApiResponse<Boolean> deleteFlight(@PathVariable long flightId) {
+	public ApiResponse<Boolean> delete(@PathVariable long flightId) {
 
 		FlightDetails flightDetails=mongoTemplate.findById(flightId, FlightDetails.class);
 		if(flightDetails==null) {
@@ -64,13 +85,17 @@ public class FlightController1 {
 		}
 
 		boolean isDeleted = mongoTemplate.remove(new Query(Criteria.where("id").is(flightId)), FlightDetails.class).wasAcknowledged();
-		
+
 		return new ApiResponse<>(HttpStatus.OK.value(),"Flight List",isDeleted);
 	}
 
+	
+	
+	
+
 	//update the provided object in flight detail  collection
 	@PutMapping("/flights/{flightId}")
-	public ApiResponse<FlightDetails> updateFlight(@PathVariable long flightId,@RequestBody FlightDetails flightDetails) {
+	public ApiResponse<FlightDetails> update(@PathVariable long flightId,@RequestBody FlightDetails flightDetails) {
 
 		FlightDetails flight=mongoTemplate.findById(flightId, FlightDetails.class);
 		if(flight==null) {
@@ -78,25 +103,24 @@ public class FlightController1 {
 		}
 
 		flightDetails.setId(flight.getId());
-		mongoTemplate.save(flightDetails);
-
-		return new ApiResponse<>(HttpStatus.OK.value(),"Flight Details Updated",flightDetails);
-	}
-
-
-	//save the provided flight-details object in FlightDetails collection and returns same object back
-	@PostMapping("/flights")
-	public ApiResponse<FlightDetails> saveFlightDetails(@RequestBody FlightDetails flightDetails) {
-
-		flightDetails.setId(seqId.getNextSequenceId(KEY));
-
-		mongoTemplate.save(flightDetails);
-
-		return new ApiResponse<>(HttpStatus.OK.value(),"Flight Details Updated",flightDetails);
-
+		
+		return new ApiResponse<>(HttpStatus.OK.value(),"Flight Details Updated",mongoTemplate.save(flightDetails));
 	}
 
 	
+	
+	
+
+	//save the provided flight-details object in FlightDetails collection and returns same object back
+	@PostMapping("/flights")
+	public ApiResponse<FlightDetails> save(@RequestBody FlightDetails flightDetails) {
+
+		flightDetails.setId(seqId.getNextSequenceId(KEY));
+
+		return new ApiResponse<>(HttpStatus.OK.value(),"Flight Details Saved Successfully",mongoTemplate.save(flightDetails));
+
+	}
+
 
 
 
